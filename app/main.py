@@ -140,11 +140,7 @@ def success():
 								<div class="col-md-4">
 									<img src="{{p.image}}" class="product" style="max-height:240px"><br>
 								</div>
-								<div class="col-md-8">
-									<div class="pinfo">
-										<span ng-bind="p.prices.currency"></span>
-										<span ng-bind="p.prices.base"></span>
-									</div>
+								<div class="col-md-7" style="margin: 10px;" >
 									<p ng-bind="p.description" style="color:gray"></p>
 									<div class="buttonWrapper">
 										<p>Book here with your friends as a group.</p>
@@ -167,27 +163,32 @@ def success():
 				<p>Make Skyscanner Social Hackday 2015</p>
 			</center>
 		</footer>
-
-		
-		<script src="/papiclient.js"></script>
+	<script src="/papiclient.js"></script>
 		
 		<script>
 			var app = angular.module('MyApp', ['papiclient']);
-
 			app.controller('MyCtrl', ['$scope', 'PapiClient', function($scope, PapiClient){
 				$scope.products = [];
-				PapiClient.Products.getOne(function(data){
+				PapiClient.Products.getAll(function(data){
 					if (data.error || !Array.isArray(data)){
 						console.log('get products error:',data);
 					} else {
-						$scope.products = data;
+						for(i=0;i<data.length;i++){
+							console.log(i);
+							if(data[i].xid == \""""+xid+"""\"){
+								console.log("found");
+								console.log(data[i]);
+								$scope.products = [data[i]];
+								break;
+							}
+						}
+						/* $scope.products = data;*/
 						setTimeout(function(){
 							MiSnSpC.bindAll(); //set up mis button show
 						}, 100);
 					}
 				});
 			}]);
-			
 		</script>
 
 		<script>
