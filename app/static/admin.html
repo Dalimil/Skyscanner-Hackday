@@ -4,61 +4,112 @@
 		<meta charset="utf-8">
 		<meta http-equiv="X-UA-Compatible" content="IE=edge">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
-		<meta name="description" content="Demo website using PAPI">
-		
-		<title>MiS Hackday - Admin</title>
 		
 		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
-		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+		
 		<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.21/angular.min.js"></script>
 		<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.21/angular-sanitize.min.js"></script>
-		<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+
 	</head>
 	
 	<body>
-		<nav class="navbar navbar-inverse navbar-fixed-top">
-			<div class="container">
-				<div class="navbar-header">
-					<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-						<span class="sr-only">Toggle navigation</span>
-						<span class="icon-bar"></span>
-						<span class="icon-bar"></span>
-						<span class="icon-bar"></span>
-					</button>
-					<a class="navbar-brand" href="/index.html">MiS Hackday</a>
-				</div>
-				<div id="navbar" class="navbar-collapse collapse">
-					<ul class="nav navbar-nav navbar-right">
-						<li><a href="/admin.html">Admin</a></li>
-					</ul>
-				</div>
-			</div>
-		</nav>
-		
 		<div class="container" ng-app="MyApp" style="margin-top:50px">
 			<div ng-controller="AdminCtrl">
-				
 				<div class="row">
-					<div class="panel panel-primary">
-						<div class="panel-heading"><h3>Create a new product</h3></div>
-						<div class="panel-body" ng-show="provider">
-+							
-							<form role="form" ng-submit="createProduct()">
+					<div class="panel panel-info">
+						<div class="panel-heading"><h3>My Provider</h3></div>
+						<div class="panel-body" ng-if="provider">
+							<pre ng-bind="showProvider()"></pre>
+						</div>
+						<div class="panel-body" ng-if="!provider">
+							<p>Create your first Provider entity:</p>
+							<form role="form" ng-submit="createProvider()">
 								<div class="form-group">
-									<label>Destination:</label>
-									<input class="form-control" ng-model="new_product.name" placeholder="Product Name">
+									<label>XID:</label>
+									<input class="form-control" ng-model="new_provider.xid" placeholder="Company unique ID as a string">
 								</div>
 								<div class="form-group">
-									<label>Short Description:</label>
-									<input class="form-control" ng-model="new_product.description">
+									<label>Name:</label>
+									<input class="form-control" ng-model="new_provider.name" placeholder="Company Name">
+								</div>
+								<div class="form-group">
+									<label>Email:</label>
+									<input class="form-control" ng-model="new_provider.email" placeholder="Company Email">
+								</div>
+								<div class="form-group">
+									<label>Logo:</label>
+									<input class="form-control" ng-model="new_provider.logo" placeholder="Company Logo URL">
+								</div>
+								<div class="form-group">
+									<label>GroupPay Seller ID (sandbox):</label>
+									<input class="form-control" ng-model="new_provider.payment.pay_id" placeholder="Seller ID for payment">
+								</div>
+								<button>Submit</button>
+							</form>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="panel panel-primary">
+						<div class="panel-heading"><h3>My Products</h3></div>
+						<div class="panel-body table-responsive">
+						<table class="table">
+							<tr ng-repeat="p in products">
+								<td>
+									<img style="max-height:100px" src="{{p.image}}">
+								</td>
+								<td>
+									<h4 ng-bind="p.name"></h4>
+									<div class="pinfo">
+										<span ng-bind="p.prices.currency"></span>
+										<span ng-bind="p.prices.base"></span>
+									</div>
+									<p ng-bind="p.description" style="color:gray"></p>
+								</td>
+								<td>
+									<pre ng-bind="p|jsonize"></pre>
+								</td>
+							</tr>
+						</table>
+						</div>
+						<div class="panel-body" ng-show="provider">
+							<div class="alert alert-success" role="alert">Create a new product here:</div>
+							<form role="form" ng-submit="createProduct()">
+								<div class="form-group">
+									<label>Product XID:</label>
+									<input class="form-control" ng-model="new_product.xid" placeholder="Product unique ID">
+								</div>
+								<div class="form-group">
+									<label>Product Name:</label>
+									<input class="form-control" ng-model="new_product.name" placeholder="Product Name">
 								</div>
 								<div class="form-group">
 									<label>Product Image:</label>
 									<input class="form-control" ng-model="new_product.image" placeholder="Image URL">
 								</div>
 								<div class="form-group">
-									<label>Arrive by:</label>
+									<label>Short Description:</label>
+									<input class="form-control" ng-model="new_product.description">
+								</div>
+								<div class="form-group">
+									<label>Currency:</label>
+									<select class="form-control" ng-model="new_product.prices.currency">
+										<option value="GBP" selected>GBP</option>
+										<option value="EUR">EUR</option>
+										<option value="USD">USD</option>
+									</select>
+								</div>
+								<div class="form-group">
+									<label>Price</label>
+									<input class="form-control" ng-model="new_product.prices.base" type="number">
+								</div>
+								<div class="form-group">
+									<label>Start Date</label>
 									<input class="form-control" type="date" ng-model="new_product.date_range.start">
+								</div>
+								<div class="form-group">
+									<label>Selectability</label>
+									<input class="form-control" type="text" ng-model="new_product.date_range.selectability" ng-value="00" readonly>
 								</div>
 								<button>Submit</button>
 							</form>
@@ -67,13 +118,6 @@
 				</div>
 			</div>
 		</div>
-		
-		<footer>
-			<hr>
-			<center>
-				<p>Make Skyscanner Social Hackday 2015</p>
-			</center>
-		</footer>
 		
 		<script src="papiclient.js"></script>
 		
@@ -159,13 +203,11 @@
 				
 				$scope.new_product = {
 					xid:'', name:'', provider_id:'', pay_id:'', image:'',
-					prices:{ currency:'GBP', base:0 },
+					prices:{ currency:'GBP', base:100 },
 					date_range:{ start:'', selectability:'00' }
 				};
 				
 				$scope.createProduct = function(){
-					$scope.new_product.xid= Math.random().toString(36).substring(2,8);
-					$scope.new_product.date_range.end = $scope.new_product.date_range.start;
 					$scope.new_product.provider_id = $scope.provider.xid || $scope.provider._id || 'o1';
 					$scope.new_product.pay_id = $scope.provider.payment.pay_id || 'DL';
 					var d = new Date($scope.new_product.date_range.start), ds = d.toISOString();
@@ -186,7 +228,6 @@
 									if (data.xid){
 										$scope.products.push(data);
 										console.log('New product:',data);
-										window.location.replace("/index.html");
 									} else {
 										var ds = JSON.stringify(data,null,4);
 										console.log(ds);

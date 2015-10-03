@@ -14,6 +14,8 @@ def main():
 def admin():
 	return server.send_static_file('admin.html')
 
+
+
 # json encoder for datetime
 def isodatetime(obj):
 	if hasattr(obj, 'isoformat'):
@@ -102,3 +104,102 @@ def product_validate():
 		return '{"error":"no data given"}'
 	r = papic.post_validate_product(data)
 	return json.dumps(r, default=json_datetime)
+
+
+@server.route('/booking')
+def success():
+	xid = request.args.get('xid', '')
+	s = xid+"""
+	<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+
+		<title>Booking</title>
+		
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+		
+		<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.21/angular.min.js"></script>
+	</head>
+	
+	<body>
+		<div class="container" ng-app="MyApp">
+			<div class="panel panel-primary" ng-controller="MyCtrl">
+				<div class="panel-heading">
+					<h2>Your booking</h2>
+				</div>
+				<table class="table">
+					<tr ng-repeat="p in products">
+						<td>
+							<div class="pname">
+								<h3 ng-bind="p.name"></h3>
+							</div>
+							<div class="row">
+								<div class="col-md-4">
+									<img src="{{p.image}}" class="product" style="max-height:240px"><br>
+								</div>
+								<div class="col-md-8">
+									<div class="pinfo">
+										<span ng-bind="p.prices.currency"></span>
+										<span ng-bind="p.prices.base"></span>
+									</div>
+									<p ng-bind="p.description" style="color:gray"></p>
+									<div class="buttonWrapper">
+										<p>Book here with your friends as a group.</p>
+										<a class="makeitsocial-button buttonNew" href="#" data-pid="{{p.xid}}"></a>
+									</div>
+								</div>
+							</div>
+						</td>
+					</tr>
+				</table>
+				<div ng-show="!products.length" style="padding:10px 20px">
+					You have no products, go to <a href="/admin.html">Admin page</a> to add your products.
+				</div>
+			</div>
+		</div>
+		
+		<footer>
+			<hr>
+			<center>
+				<p>Make Skyscanner Social Hackday 2015</p>
+			</center>
+		</footer>
+
+		
+		<script src="/papiclient.js"></script>
+		
+		<script>
+			var app = angular.module('MyApp', ['papiclient']);
+
+			app.controller('MyCtrl', ['$scope', 'PapiClient', function($scope, PapiClient){
+				$scope.products = [];
+				PapiClient.Products.getOne(function(data){
+					if (data.error || !Array.isArray(data)){
+						console.log('get products error:',data);
+					} else {
+						$scope.products = data;
+						setTimeout(function(){
+							MiSnSpC.bindAll(); //set up mis button show
+						}, 100);
+					}
+				});
+			}]);
+			
+		</script>
+
+		<script>
+			var MiSnSpC = {
+				purl: 'https://popup-sandbox.herokuapp.com'
+			};
+			(function(d,s,e){
+				e=d.createElement("script");e.src=s;d.head.appendChild(e);
+			})(document,"https://d21uq1a8lrig03.cloudfront.net/mplus.js");
+		</script>
+
+	</body>
+</html>
+	"""
+	return s;

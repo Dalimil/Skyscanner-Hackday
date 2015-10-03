@@ -4,107 +4,207 @@
 		<meta charset="utf-8">
 		<meta http-equiv="X-UA-Compatible" content="IE=edge">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
-		<meta name="description" content="Demo website using PAPI">
 		
+
 		<title>MiS Hackday</title>
 		
 		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
 		<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.21/angular.min.js"></script>
+		<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.21/angular-sanitize.min.js"></script>
 		<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+
+		<script src="papiclient.js"></script>
 	</head>
 	
 	<body>
-		<nav class="navbar navbar-inverse navbar-fixed-top">
-			<div class="container">
-				<div class="navbar-header">
-					<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-						<span class="sr-only">Toggle navigation</span>
-						<span class="icon-bar"></span>
-						<span class="icon-bar"></span>
-						<span class="icon-bar"></span>
-					</button>
-					<a class="navbar-brand" href="">MiS Hackday</a>
-				</div>
-				<div id="navbar" class="navbar-collapse collapse">
-					<ul class="nav navbar-nav navbar-right">
-						<li><a href="/admin.html">Admin</a></li>
-					</ul>
-				</div>
+		<img src="img/background.jpg" style="position: absolute;width: 100%; left: 0px; top: 0px; z-index: -1;"> <!--style="background-image: url('img/background.jpg')">-->
+		<div class="row">
+			<div class="col-sm-8">
+			<div class="well well-lg" style="margin-top:250px; text-align:center;">
+				<h1>Book with your friends</h1>
+				<h4>powered by Make it Social + Skyscanner</h4><br />
+				<button type="button" class="btn btn-primary btn-lg" onClick="getElementById('create').style='';javascript:window.location.href='#create';">Create an event</button>
 			</div>
-		</nav>
-		
-		<div class="well well-lg" style="margin-top:50px; text-align:center;">
-			<h1>Book with your friends</h1>
-			<h4>powered by Make it Social + Skyscanner</h4>
-		</div>
-		<div class="container" ng-app="MyApp">
-			<div class="panel panel-primary" ng-controller="MyCtrl">
-				<div class="panel-heading">
-					<h2>Products</h2>
-				</div>
-				<table class="table">
-					<tr ng-repeat="p in products">
-						<td>
-							<div class="pname">
-								<h3 ng-bind="p.name"></h3>
-							</div>
-							<div class="row">
-								<div class="col-md-4">
-									<img src="{{p.image}}" class="product" style="max-height:240px"><br>
-								</div>
-								<div class="col-md-8">
-									<p ng-bind="p.description" style="color:gray"></p>
-									<div class="buttonWrapper">
-										<p>Book here with your friends as a group.</p>
-										<a class="makeitsocial-button buttonNew" href="#" data-pid="{{p.xid}}"></a>
-									</div>
-								</div>
-							</div>
-						</td>
-					</tr>
-				</table>
-				<div ng-show="!products.length" style="padding:10px 20px">
-					You have no products, go to <a href="/admin.html">Admin page</a> to add your products.
-				</div>
 			</div>
 		</div>
+
+		<div class="container" ng-app="MyApp" style="margin-top:50px">
+			<!-- Book -->
+			<div id="create" style="visibility: hidden" ng-controller="AdminCtrl">
+				
+				<div class="row">
+					<div class="panel panel-primary">
+						<div class="panel-heading"><h3>Create a new event</h3></div>
+						<div class="panel-body" ng-show="provider">							
+							<form role="form" ng-submit="createProduct()">
+								<div class="form-group">
+									<label>Destination:</label>
+									<input class="form-control" ng-model="new_product.name" placeholder="Where do you want to go?">
+								</div>
+								<div class="form-group">
+									<label>Short Description:</label>
+									<input class="form-control" ng-model="new_product.description" placeholder="Information for your friends">
+								</div>
+								<div class="form-group">
+									<label>Product Image:</label>
+									<input class="form-control" ng-model="new_product.image" placeholder="Image URL">
+								</div>
+								<div class="form-group">
+									<label>Arrive by:</label>
+									<input class="form-control" type="date" ng-model="new_product.date_range.start" placeholder="The latest time you want to arrive">
+								</div>
+								<button type="submit" class="btn btn-primary">Create</button>
+							</form>
+						</div>
+					</div>
+				</div>
+			</div>
 		
-		<footer>
-			<hr>
-			<center>
-				<p>Make Skyscanner Social Hackday 2015</p>
-			</center>
-		</footer>
 		
-		<script src="/papiclient.js"></script>
 		
 		<script>
 			var app = angular.module('MyApp', ['papiclient']);
 
-			app.controller('MyCtrl', ['$scope', 'PapiClient', function($scope, PapiClient){
+			app.controller('AdminCtrl', ['$scope', 'PapiClient', function($scope, PapiClient){
+				$scope.provider = null;
+				function loadProvider(xid){
+					if (xid) {
+						PapiClient.Providers.getOne(xid, function(pd){
+							if (!pd.xid){
+								console.log('get provider error:', pd);
+							} else {
+								$scope.provider = pd;
+							}
+						});
+					} else {
+						PapiClient.Providers.getAll(function(data){
+							if (data.error || !Array.isArray(data)){
+								console.log('get providers error:',data);
+							} else {
+								if (data.length>0){
+									//$scope.provider = data[0]; //only the first used here
+									var pid;
+									for (var i=0; i<data.length; i++){
+										pid = data[i].xid || data[i]._id;
+										if (pid) break;
+									}
+									if (pid)
+										loadProvider(pid);
+									console.log('Provider: ',$scope.provider);
+								} else {
+									console.log('Nothing returned');
+								}
+							}
+						});
+					}
+				}
+				loadProvider();
+				
+				$scope.new_provider = {
+					xid:'', name:'', email:'', logo:'', 
+					payment: { method:'mispay', pay_id:'', live:false }, 
+					booking: { engine:'local' }
+				};
+				
+				$scope.createProvider = function(){
+					PapiClient.Providers.validate($scope.new_provider, function(vr){
+						if (vr.valid) {
+							PapiClient.Providers.create($scope.new_provider, function(r){
+								console.log('create provider returns:', r);
+								if (r.xid){
+									loadProvider();
+								} else {
+									var rs = JSON.stringify(r, null, 4);
+									console.log(rs);
+									alert('Failed to create provider, see console.log');
+								}
+							});
+						} else {
+							console.log(JSON.stringify(vr, null, 4));
+							alert('Invalid, check console log');
+						}
+					});
+				};
+				$scope.showProvider = function(){
+					if ($scope.provider){
+						return JSON.stringify($scope.provider, null, 4);
+					}
+					return '';
+				};
+				
 				$scope.products = [];
 				PapiClient.Products.getAll(function(data){
 					if (data.error || !Array.isArray(data)){
 						console.log('get products error:',data);
 					} else {
 						$scope.products = data;
-						setTimeout(function(){
-							MiSnSpC.bindAll(); //set up mis button show
-						}, 100);
+						console.log('Products: ',$scope.products);
 					}
 				});
+				
+				$scope.new_product = {
+					xid:'', name:'', provider_id:'', pay_id:'', image:'',
+					prices:{ currency:'GBP', base:0 },
+					date_range:{ start:'', selectability:'00' }
+				};
+				
+				$scope.createProduct = function(){
+					$scope.new_product.xid= Math.random().toString(36).substring(2,8);
+					$scope.new_product.date_range.end = $scope.new_product.date_range.start;
+					$scope.new_product.provider_id = $scope.provider.xid || $scope.provider._id || 'o1';
+					$scope.new_product.pay_id = $scope.provider.payment.pay_id || 'DL';
+					var d = new Date($scope.new_product.date_range.start), ds = d.toISOString();
+					$scope.new_product.date_range.start = ds;
+					PapiClient.Products.validate($scope.new_product, function(vr){
+						if (vr.valid) {
+							submitProduct();
+						} else {
+							console.log(JSON.stringify(vr, null, 4));
+							alert('Validation failed, see console log');
+							getElementById('booking').style='';
+						}
+					});
+					function submitProduct(){
+						PapiClient.Products.create($scope.new_product, function(r){
+							console.log('create product:',r);
+							if (r.xid){
+								PapiClient.Products.getOne(r.xid, function(data){
+									if (data.xid){
+										$scope.products.push(data);
+										console.log('New product:',data);
+										window.location.replace("/success?xid="+r.xid);
+									} else {
+										var ds = JSON.stringify(data,null,4);
+										console.log(ds);
+										alert('Error get created product:'+ds);
+									}
+								});
+							} else {
+								var rs = JSON.stringify(r,null,4);
+								console.log(rs);
+								alert('Failed to create product:'+rs);
+							}
+						});
+					}
+				};
 			}]);
+			
+			app.filter('jsonize', function(){
+				return function(p){
+					return JSON.stringify(p, null, 4);
+				};
+			});
 		</script>
 
-		<script>
-			var MiSnSpC = {
-				purl: 'https://popup-sandbox.herokuapp.com'
-			};
-			(function(d,s,e){
-				e=d.createElement("script");e.src=s;d.head.appendChild(e);
-			})(document,"https://d21uq1a8lrig03.cloudfront.net/mplus.js");
-		</script>
+		
+
+		<footer>
+			<hr>
+			<center>
+				<p>Make Skyscanner Social Hackday 2015</p>
+			</center>
+		</footer>
 
 	</body>
 </html>
