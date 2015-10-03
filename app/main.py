@@ -109,7 +109,7 @@ def product_validate():
 @server.route('/booking')
 def success():
 	xid = request.args.get('xid', '')
-	s = xid+"""
+	s = """
 	<!DOCTYPE html>
 <html lang="en">
 	<head>
