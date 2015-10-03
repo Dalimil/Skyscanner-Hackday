@@ -74,6 +74,23 @@ class TripPricing:
 		self.origin_place_id = PLACE_ID_CODES[origin.strip().lower()]
 		self.destination_place_id = PLACE_ID_CODES[destination.strip().lower()]
 
+		self.flights = {}
+
+	def format_and_save_poll_data(self,data):
+		carriers = { item["Id"]:item for item in data["Carriers"]}
+		segments = { item["Id"]:item for item in data["Segments"]}
+		legs = { item["Id"]: item for item in data["Legs"]}
+		itineraries = [{
+			"OutboundLegId":obj["OutboundLegId"],
+			"Pricing":obj["PricingOptions"][0],
+			"BookingDetailsLink":obj["BookingDetailsLink"]
+		} for obj in data["Itineraries"]]
+
+		self.flights["Carriers"] = carriers
+		self.flights["Segments"] = segments
+		self.flights["Legs"] = legs
+		self.flights["Itineraries"] = itineraries
+
 	def open_session(self):
 		headers = {
 			"Content-Type":"application/x-www-form-urlencoded",
@@ -103,12 +120,21 @@ class TripPricing:
 			"Accept":"application/json"
 		}
 		params = {
-			"apiKey":self.API_KEY
+			"apiKey":self.API_KEY,
+			"sorttype":"price",
+			"sortorder":"asc"
 		}
 
 		r = requests.get(self.POLL_SESSION_URL, headers=headers, params=params)
 
 		if r.status_code in [200,201]:
 			print "request successful"
+			data = json.loads(r.text)
+
+			self.format_and_save_poll_data(data)
+
+						
+
 			
+
 
