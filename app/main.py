@@ -14,7 +14,14 @@ def main():
 def admin():
 	return server.send_static_file('admin.html')
 
-
+@server.route('/papi/booking', methods=['POST'])
+def webhook():
+	data = request.get_json()
+	# TODO: Save into a DB: (email, origin)
+	# user = data.user
+	# origin = data.origin
+	# json.dumps(data)
+	return "{'status': 'OK' }";
 
 # json encoder for datetime
 def isodatetime(obj):
