@@ -148,7 +148,8 @@
 				$scope.new_product = {
 					xid:'', name:'', provider_id:'', pay_id:'', image:'', description:'',
 					prices:{ currency:'GBP', base:0 },
-					date_range:{ start:'', selectability:'00' }
+					date_range:{ start:'', selectability:'00' },
+					data_capture:[{name:'Origin', type:'text', required:true}]
 				};
 				
 				$scope.createProduct = function(){
@@ -164,7 +165,6 @@
 						} else {
 							console.log(JSON.stringify(vr, null, 4));
 							alert('Validation failed, see console log');
-							getElementById('booking').style='';
 						}
 					});
 					function submitProduct(){
