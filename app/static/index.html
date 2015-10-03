@@ -18,17 +18,19 @@
 	</head>
 	
 	<body>
-		<img src="img/background.jpg" style="position: absolute;width: 100%; left: 0px; top: 0px; z-index: -1;"> <!--style="background-image: url('img/background.jpg')">-->
+		<img src="img/background.jpg" style="position: absolute;width: 120%; left: 0px; top: 0px; z-index: -1;"> <!--style="background-image: url('img/background.jpg')">-->
 		<div class="row">
-			<div class="col-sm-8">
-			<div class="well well-lg" style="margin-top:250px; text-align:center;">
+			<div class="col-sm-1"> </div>
+			<div class="col-sm-5">
+			<div class="well well-lg" style="margin-top:75px; text-align:center;">
 				<h1>Book with your friends</h1>
 				<h4>powered by Make it Social + Skyscanner</h4><br />
 				<button type="button" class="btn btn-primary btn-lg" onClick="getElementById('create').style='';javascript:window.location.href='#create';">Create an event</button>
 			</div>
 			</div>
+			<div class="col-sm-6"></div>
 		</div>
-
+		<br /><br /><br /><br /><br /><br /><br />
 		<div class="container" ng-app="MyApp" style="margin-top:50px">
 			<!-- Book -->
 			<div id="create" style="visibility: hidden" ng-controller="AdminCtrl">
@@ -173,7 +175,7 @@
 									if (data.xid){
 										$scope.products.push(data);
 										console.log('New product:',data);
-										window.location.replace("/success?xid="+r.xid);
+										window.location.replace("/booking?xid="+r.xid);
 									} else {
 										var ds = JSON.stringify(data,null,4);
 										console.log(ds);
