@@ -1,13 +1,12 @@
-# Install required packages
+#Skyscanner+Make it Social - Hackday
+
+#### Install required packages
 ```sh
-pip install -r requirements
+pip install -r requirements.txt
 ```
-# Export Api Keys
+
+```
+#### Start the server (localhost:8080):
 ```sh
-source initApiKeys.sh
+./init.sh
 ```
-# Start the server now:
-```sh
-python run.py
-```
-Then browse [http://localhost:8080](http://localhost:8080) and play with it.
