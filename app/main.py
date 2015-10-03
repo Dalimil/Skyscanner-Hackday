@@ -174,7 +174,6 @@ def success():
 						console.log('get products error:',data);
 					} else {
 						for(i=0;i<data.length;i++){
-							console.log(i);
 							if(data[i].xid == \""""+xid+"""\"){
 								console.log("found");
 								console.log(data[i]);
