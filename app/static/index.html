@@ -49,7 +49,7 @@
 									<input class="form-control" ng-model="new_product.description" placeholder="Information for your friends">
 								</div>
 								<div class="form-group">
-									<label>Product Image:</label>
+									<label>Image:</label>
 									<input class="form-control" ng-model="new_product.image" placeholder="Image URL">
 								</div>
 								<div class="form-group">
@@ -147,7 +147,7 @@
 				
 				$scope.new_product = {
 					xid:'', name:'', provider_id:'', pay_id:'', image:'', description:'',
-					prices:{ currency:'GBP', base:0 },
+					prices:{ currency:'GBP', base:0.01 },
 					date_range:{ start:'', selectability:'00' },
 					data_capture:[{name:'Origin', type:'text', required:true}]
 				};
