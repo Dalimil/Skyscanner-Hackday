@@ -9,9 +9,9 @@
 		<title>MiS Hackday</title>
 		
 		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
-		<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
 		<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.21/angular.min.js"></script>
+		<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
 	</head>
 	
 	<body>
@@ -41,7 +41,7 @@
 		<div class="container" ng-app="MyApp">
 			<div class="panel panel-primary" ng-controller="MyCtrl">
 				<div class="panel-heading">
-					<h2>My Products</h2>
+					<h2>Products</h2>
 				</div>
 				<table class="table">
 					<tr ng-repeat="p in products">
@@ -54,10 +54,6 @@
 									<img src="{{p.image}}" class="product" style="max-height:240px"><br>
 								</div>
 								<div class="col-md-8">
-									<div class="pinfo">
-										<span ng-bind="p.prices.currency"></span>
-										<span ng-bind="p.prices.base"></span>
-									</div>
 									<p ng-bind="p.description" style="color:gray"></p>
 									<div class="buttonWrapper">
 										<p>Book here with your friends as a group.</p>

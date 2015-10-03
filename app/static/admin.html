@@ -9,10 +9,10 @@
 		<title>MiS Hackday - Admin</title>
 		
 		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
-		<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
 		<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.21/angular.min.js"></script>
 		<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.21/angular-sanitize.min.js"></script>
+		<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
 	</head>
 	
 	<body>
@@ -25,7 +25,7 @@
 						<span class="icon-bar"></span>
 						<span class="icon-bar"></span>
 					</button>
-					<a class="navbar-brand" href="">MiS Hackday</a>
+					<a class="navbar-brand" href="/index.html">MiS Hackday</a>
 				</div>
 				<div id="navbar" class="navbar-collapse collapse">
 					<ul class="nav navbar-nav navbar-right">
@@ -40,64 +40,25 @@
 				
 				<div class="row">
 					<div class="panel panel-primary">
-						<div class="panel-heading"><h3>My Products</h3></div>
-						<div class="panel-body table-responsive">
-						<table class="table">
-							<tr ng-repeat="p in products">
-								<td>
-									<img style="max-height:100px" src="{{p.image}}">
-								</td>
-								<td>
-									<h4 ng-bind="p.name"></h4>
-									<div class="pinfo">
-										<span ng-bind="p.prices.currency"></span>
-										<span ng-bind="p.prices.base"></span>
-									</div>
-									<p ng-bind="p.description" style="color:gray"></p>
-								</td>
-								<td>
-									<pre ng-bind="p|jsonize"></pre>
-								</td>
-							</tr>
-						</table>
-						</div>
+						<div class="panel-heading"><h3>Create a new product</h3></div>
 						<div class="panel-body" ng-show="provider">
-							<div class="alert alert-success" role="alert">Create a new product here:</div>
++							
 							<form role="form" ng-submit="createProduct()">
 								<div class="form-group">
-									<label>Product XID:</label>
-									<input class="form-control" ng-model="new_product.xid" placeholder="Product unique ID">
-								</div>
-								<div class="form-group">
-									<label>Product Name:</label>
+									<label>Destination:</label>
 									<input class="form-control" ng-model="new_product.name" placeholder="Product Name">
-								</div>
-								<div class="form-group">
-									<label>Product Image:</label>
-									<input class="form-control" ng-model="new_product.image" placeholder="Image URL">
 								</div>
 								<div class="form-group">
 									<label>Short Description:</label>
 									<input class="form-control" ng-model="new_product.description">
 								</div>
 								<div class="form-group">
-									<label>Currency:</label>
-									<select class="form-control" ng-model="new_product.prices.currency">
-										<option value="GBP" selected>GBP</option>
-										<option value="EUR">EUR</option>
-									</select>
+									<label>Product Image:</label>
+									<input class="form-control" ng-model="new_product.image" placeholder="Image URL">
 								</div>
 								<div class="form-group">
-									<label>Price</label>
-									<input class="form-control" ng-model="new_product.prices.base" type="number">
-								</div>
-								<div class="form-group">
-									<label>Start Date</label>
+									<label>Arrive by:</label>
 									<input class="form-control" type="date" ng-model="new_product.date_range.start">
-								</div>
-								<div class="form-group">
-									<label>Selectability</label>
-									<input class="form-control" type="text" ng-model="new_product.date_range.selectability" ng-value="00" readonly>
 								</div>
 								<button>Submit</button>
 							</form>
@@ -198,11 +159,13 @@
 				
 				$scope.new_product = {
 					xid:'', name:'', provider_id:'', pay_id:'', image:'',
-					prices:{ currency:'GBP', base:100 },
+					prices:{ currency:'GBP', base:0 },
 					date_range:{ start:'', selectability:'00' }
 				};
 				
 				$scope.createProduct = function(){
+					$scope.new_product.xid= Math.random().toString(36).substring(2,8);
+					$scope.new_product.date_range.end = $scope.new_product.date_range.start;
 					$scope.new_product.provider_id = $scope.provider.xid || $scope.provider._id || 'o1';
 					$scope.new_product.pay_id = $scope.provider.payment.pay_id || 'DL';
 					var d = new Date($scope.new_product.date_range.start), ds = d.toISOString();
@@ -223,6 +186,7 @@
 									if (data.xid){
 										$scope.products.push(data);
 										console.log('New product:',data);
+										window.location.replace("/index.html");
 									} else {
 										var ds = JSON.stringify(data,null,4);
 										console.log(ds);
