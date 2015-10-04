@@ -112,7 +112,7 @@ class Optimizer:
 			for i in range(len(self.state)):
 				new_state = list(best_state)
 
-				if self.state[i] == 0:
+				if new_state[i] == 0:
 					new_state[i] += 1
 					new_cost = self.cost(new_state)
 
@@ -121,7 +121,7 @@ class Optimizer:
 						best_state = list(new_state)
 						p=True
 
-				elif self.state[i] == len(self.trips[i])-1:
+				elif new_state[i] == len(self.trips[i])-1:
 					new_state[i] -= 1
 					new_cost = self.cost(new_state)
 
