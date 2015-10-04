@@ -24,12 +24,12 @@ def webhook():
 	passw = "57905a18a3a333b1f80d766bf9e40b5a";
 	data = request.get_json()
 	xid = data["product"]["id"]
-	destination = data["product"]["name"]
 	email = data["booking"]["sp"]["usr"]["em"]
 	origin=data["booking"]["sp"]["usr"]["udc"].values()[0]["Origin"]
 
 	prod = requests.get("https://papi-sandbox.makeitsocial.com/products/"+xid, auth=HTTPBasicAuth(userx, passw))
 	arrival = str(json.loads(str(prod.text))["date_range"]["start"])
+	destination = str(json.loads(str(prod.text))["name"])
 
 	global user_info
 	single_u_info = {"destination":destination, "origin": origin, "email": email, "arrival": arrival}
