@@ -16,11 +16,25 @@ def admin():
 
 @server.route('/papi/booking', methods=['POST'])
 def webhook():
+	key = "dalimilhajek@gmail.com:57905a18a3a333b1f80d766bf9e40b5a";
 	data = request.get_json()
+	# xid = data.xid
 	# TODO: Save into a DB: (email, origin)
+	
 	# user = data.user
 	# origin = data.origin
 	# json.dumps(data)
+	# update description
+
+	# curl -X GET -u $key https://papi-sandbox.makeitsocial.com/products/$xid
+	# old_desc = ?
+
+	# compute flights
+
+	# update description
+	desc = ""
+	# curl -X PUT -u $key -d '{"description":$old_desc + $desc}' https://papi-sandbox.makeitsocial.com/products/$xid -H "Content-Type:application/json"
+	
 	return "{'status': 'OK' }";
 
 # json encoder for datetime
