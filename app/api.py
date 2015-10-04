@@ -251,8 +251,17 @@ def compute_flights(users):
 
 	_id = best_trips[0]["Id"]
 
-	user_info = {}
+	users_info = [{
+		"Origin":users[i]["origin"],
+		"Destination":users[i]["destination"],
+		"Departure":trips[i].flights["Legs"][best_trips[i]["Id"]]["Departure"],
+		"Arrival":trips[i].flights["Legs"][best_trips[i]["Id"]]["Arrival"],
+		"Duration":trips[i].flights["Legs"][best_trips[i]["Id"]]["Duration"],
+		"Price":trips[i].flights["Itineraries"][best_trips[i]["Id"]]["Pricing"]["Price"],
+		"DeeplinkUrl":trips[i].flights["Itineraries"][best_trips[i]["Id"]]["Pricing"]["DeeplinkUrl"]
+	} for i in range(len(best_trips))]
 
+	"""
 	user_info["Origin"]= users[0]["origin"]
 	user_info["Destination"]= users[0]["destination"]
 	user_info["Departure"]= trips[0].flights["Legs"][_id]["Departure"]
@@ -262,9 +271,10 @@ def compute_flights(users):
 
 	user_info["Price"]=trips[0].flights["Itineraries"][_id]["Pricing"]["Price"]
 	user_info["DeeplinkUrl"]= trips[0].flights["Itineraries"][_id]["Pricing"]["DeeplinkUrl"]
+	"""
 	#user_info["Segments"]= [trips[0].flights["Segments"][segment_id] for segment_id in trips[0].flights["Legs"][_id]["SegmentIds"]]
 
-	return [user_info]
+	return users_info
 
 
 
