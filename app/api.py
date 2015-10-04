@@ -236,7 +236,7 @@ class TripPricing:
 			self.create_summary(self.flights)
 			
 def compute_flights(users):
-	trips = [TripPricing(user["origin"],user["destination"],user["arrival"]) for user in users]
+	trips = [TripPricing(user["origin"],user["destination"],user["arrival"][:-5]) for user in users]
 
 	for i, trip in enumerate(trips):
 		print "Opening session for user {0}".format(i)
