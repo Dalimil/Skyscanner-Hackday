@@ -278,16 +278,27 @@ def compute_flights(users):
 	return users_info
 
 def send_email(users_info):
-	def user_info_to_text(user_info):
-		return user_info["Email"]+"\nFrom: "+user_info["Origin"]+"\nDeparture time: "+" ".join(user_info["Departure"].split("T"))+"\nArrival time: "+" ".join(user_info["Arrival"].split("T"))+"\nPrice: "+str(user_info["Price"])+"\n\nTicket in this link: "+user_info["DeeplinkUrl"]+"\n\n\n"
-	
+	def user_info_to_text(user_info,deeplink):
+		if deeplink:
+			return user_info["Email"]+"\nFrom: "+user_info["Origin"]+"\nDeparture time: "+" ".join(user_info["Departure"].split("T"))+"\nArrival time: "+" ".join(user_info["Arrival"].split("T"))+"\nPrice: "+str(user_info["Price"])+"\n\nYour Ticket in this link: "+user_info["DeeplinkUrl"]+"\n\n\n"
+		else:
+			return user_info["Email"]+"\nFrom: "+user_info["Origin"]+"\nDeparture time: "+" ".join(user_info["Departure"].split("T"))+"\nArrival time: "+" ".join(user_info["Arrival"].split("T"))+"\nPrice: "+str(user_info["Price"])+"\n\n\n"
+
+	url = "https://api.mailgun.net/v3/sandboxff7ed2cffc264af087e9442d1e5b02e8.mailgun.org/messages"
+
+	for user in users_info:
+		email = user["Email"]
+		text = "".join([user_info_to_text(user2,False) if user["Email"] != user2["Email"] else user_info_to_text(user2,True) for user2 in users_info ])
+		subject = "Trip to "+users_info[0]["Destination"]+" - tickets and schedule"
+		
+		data = {"from":"gowithfriends@hackathon.com","to":email,"subject":subject,"text":text}
+
+		r = requests.post(url,auth=("api","key-e8921e9f18f175219e090d218a3c6db5"),data=data)
+
+	"""
 	emails = [user["Email"] for user in users_info]
 	text = "".join([user_info_to_text(user) for user in users_info])
 	subject = "Trip to "+users_info[0]["Destination"]+" - tickets and schedule"
-
-	url = "https://api.mailgun.net/v3/sandboxff7ed2cffc264af087e9442d1e5b02e8.mailgun.org/messages"
-	data = {"from":"gowithfriends@hackathon.com","to":emails,"subject":subject,"text":text}
-
-	r = requests.post(url,auth=("api","key-e8921e9f18f175219e090d218a3c6db5"),data=data)
+	"""
 
 
