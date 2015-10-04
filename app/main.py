@@ -38,11 +38,11 @@ def webhook():
 	group_size = data["booking"]["sp"]["gsize"]
 	f = ""
 	if(len(user_info) >= group_size):
-		f=flights()
+		f=flights(xid, userx, passw)
 		user_info = []
 	return "{'status': 'OK' }"+json.dumps(f)+"--"+str(len(user_info));
 
-def flights():
+def flights(xid, userx, passw):
 	# compute flights
 	global user_info
 	fl = compute_flights(user_info)
