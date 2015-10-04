@@ -147,6 +147,8 @@ class Optimizer:
 						best_state = list(new_state)
 						p=True
 
+		self.state = list(best_state)
+
 		return best_state
 
 
@@ -156,7 +158,7 @@ class TripPricing:
 		self.CREATE_SESSION_URL = "http://partners.api.skyscanner.net/apiservices/pricing/v1.0"
 		self.POLL_SESSION_URL = ""
 
-		self.max_arrival_time = time.strptime(max_arrival_time_str,"%d/%m/%Y %H:%M")
+		self.max_arrival_time = time.strptime(max_arrival_time_str,"%Y-%m-%dT%H:%M:%S")
 		self.origin_place_id = PLACE_ID_CODES[origin.strip().lower()]
 		self.destination_place_id = PLACE_ID_CODES[destination.strip().lower()]
 
@@ -230,5 +232,34 @@ class TripPricing:
 
 			self.create_summary(self.flights)
 			
+def compute_flights(users):
+	trips = [TripPricing(user["origin"],user["destination"],user["arrival"]) for user in users]
+
+	for i, trip in enumerate(trips):
+		print "Opening session for user {0}".format(i)
+		trip.open_session()
+		print "Polling session for user {0}".format(i)
+		trip.poll_session()
+
+	opt = Optimizer(trips)
+	state = opt.optimize()
+
+	best_trips = [trip.summary[s] for s,trip in zip(state,trips)]
+
+	_id = best_trips[0]["Id"]
+
+	print trips[0].flights["Itineraries"][_id]["Pricing"]["Price"]
+	print trips[0].flights["Itineraries"][_id]["Pricing"]["DeeplinkUrl"]
+	print trips[0].flights["Itineraries"][_id]["Pricing"]["Agents"]
+	print trips[0].flights["Legs"][_id]["SegmentIds"]
+	print trips[0].flights["Legs"][_id]["OriginStation"]
+	print trips[0].flights["Legs"][_id]["DestinationStation"]
+	print trips[0].flights["Legs"][_id]["Departure"]
+	print trips[0].flights["Legs"][_id]["Arrival"]
+	print trips[0].flights["Legs"][_id]["Duration"]
+
+
+
+
 
 
