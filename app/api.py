@@ -121,7 +121,6 @@ class Optimizer:
 						best_state = list(new_state)
 						p=True
 						
-					continue
 
 				elif new_state[i] == len(self.trips[i])-1:
 					new_state[i] -= 1
@@ -132,7 +131,6 @@ class Optimizer:
 						best_state = list(new_state)
 						p=True
 						
-					continue
 
 				else:
 					new_state[i] += 1
@@ -151,7 +149,6 @@ class Optimizer:
 						best_state = list(new_state)
 						p=True
 
-					continue
 
 		self.state = list(best_state)
 
