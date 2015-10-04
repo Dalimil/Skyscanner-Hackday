@@ -264,7 +264,7 @@ def compute_flights(users):
 	user_info["DeeplinkUrl"]= trips[0].flights["Itineraries"][_id]["Pricing"]["DeeplinkUrl"]
 	#user_info["Segments"]= [trips[0].flights["Segments"][segment_id] for segment_id in trips[0].flights["Legs"][_id]["SegmentIds"]]
 
-	pprint(user_info)
+	return [user_info]
 
 
 
