@@ -15,6 +15,7 @@ def admin():
 	return server.send_static_file('admin.html')
 
 import requests
+from api import compute_flights
 from requests.auth import HTTPBasicAuth
 @server.route('/papi/booking', methods=['POST'])
 def webhook():
@@ -22,10 +23,9 @@ def webhook():
 	passw = "57905a18a3a333b1f80d766bf9e40b5a";
 	data = request.get_json()
 	xid = data["product"]["id"]
+	destination = data["product"]["name"]
 	email = data["booking"]["sp"]["usr"]["em"]
-	
-	# origin = data.origin
-
+	origin=data["booking"]["sp"]["usr"]["udc"].values()[0]["Origin"]
 	
 
 	# compute flights
@@ -37,9 +37,9 @@ def webhook():
 	old_desc = str(json.loads(str(prod.text))["description"])
 	# update description
 	desc = "and Flights: "+str(fl)
-	res = requests.put("https://papi-sandbox.makeitsocial.com/products/"+xid, auth=HTTPBasicAuth(userx, passw), data=json.dumps({"description": old_desc+desc}), headers={"Content-Type":"application/json"});
+	#res = requests.put("https://papi-sandbox.makeitsocial.com/products/"+xid, auth=HTTPBasicAuth(userx, passw), data=json.dumps({"description": old_desc+desc}), headers={"Content-Type":"application/json"});
 	
-	return "{'status': 'OK' }"+";;;"+res.text;
+	return "{'status': 'OK' }"+";;;"+origin+"---"+destination;
 
 # json encoder for datetime
 def isodatetime(obj):
