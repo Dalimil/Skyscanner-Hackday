@@ -22,23 +22,24 @@ def webhook():
 	passw = "57905a18a3a333b1f80d766bf9e40b5a";
 	data = request.get_json()
 	xid = data["product"]["id"]
-	user = data["booking"]["sp"]["usr"]["email"]
+	email = data["booking"]["sp"]["usr"]["em"]
 	
 	# origin = data.origin
-	# json.dumps(data)
-	# update description
 
-	prod = requests.get("https://papi-sandbox.makeitsocial.com/products/"+xid, auth=HTTPBasicAuth(userx, passw))
-	old_desc = json.dumps(json.loads(str(prod.text))["description"])
+	
 
 	# compute flights
-	# flights.compute_flights([{"email":"origin"}, { ])
+	fl = "..."
+	# fl = flights.compute_flights([{"email":"origin"}, { ])
 
+	#get old description
+	prod = requests.get("https://papi-sandbox.makeitsocial.com/products/"+xid, auth=HTTPBasicAuth(userx, passw))
+	old_desc = str(json.loads(str(prod.text))["description"])
 	# update description
-	desc = "/n and <br />Flights: "
-	res = requests.put("https://papi-sandbox.makeitsocial.com/products/"+xid, auth=HTTPBasicAuth(userx, passw), params={"description": str(old_desc)+str(desc)}, headers={"Content-Type":"application/json"});
+	desc = "and Flights: "+str(fl)
+	res = requests.put("https://papi-sandbox.makeitsocial.com/products/"+xid, auth=HTTPBasicAuth(userx, passw), data=json.dumps({"description": old_desc+desc}), headers={"Content-Type":"application/json"});
 	
-	return "{'status': 'OK' }"+";;;"+res.text+"z";
+	return "{'status': 'OK' }"+";;;"+res.text;
 
 # json encoder for datetime
 def isodatetime(obj):
