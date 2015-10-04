@@ -252,6 +252,7 @@ def compute_flights(users):
 	_id = best_trips[0]["Id"]
 
 	users_info = [{
+		"Email":users[i]["email"],
 		"Origin":users[i]["origin"],
 		"Destination":users[i]["destination"],
 		"Departure":trips[i].flights["Legs"][best_trips[i]["Id"]]["Departure"],
