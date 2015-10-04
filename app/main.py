@@ -46,10 +46,8 @@ def flights(xid, userx, passw):
 	global user_info
 	fl = compute_flights(user_info)
 	print fl
-	send_email(fl)
-	desc = ".....................................................CHECK YOUR EMAIL FOR MORE INFORMATION!.........Flights: "
-	for i in fl:
-		desc += str(i["Email"])+":(from: "+i["Origin"]+", departure: "+str(i["Departure"])+", duration: "+str(i["Duration"])+"min, arrival: "+str(i["Arrival"])+", price: "+str(i["Price"])+"€) ............................"
+	send_email(fl) # sends an email to everyone
+	desc = "..........CHECK YOUR EMAIL FOR TRAVEL INFORMATION!........."
 
 	#get old description
 	prod = requests.get("https://papi-sandbox.makeitsocial.com/products/"+xid, auth=HTTPBasicAuth(userx, passw))
