@@ -14,26 +14,29 @@ def main():
 def admin():
 	return server.send_static_file('admin.html')
 
+import request as pyth_request
+from requests.auth import HTTPBasicAuth
 @server.route('/papi/booking', methods=['POST'])
 def webhook():
-	key = "dalimilhajek@gmail.com:57905a18a3a333b1f80d766bf9e40b5a";
+	user = "dalimilhajek@gmail.com"
+	passw = "57905a18a3a333b1f80d766bf9e40b5a";
 	data = request.get_json()
-	# xid = data.xid
-	# TODO: Save into a DB: (email, origin)
+	xid = data.product.id
+	user = booking.sp.usr
 	
-	# user = data.user
 	# origin = data.origin
 	# json.dumps(data)
 	# update description
 
-	# curl -X GET -u $key https://papi-sandbox.makeitsocial.com/products/$xid
-	# old_desc = ?
+	prod = pyth_request.get("https://papi-sandbox.makeitsocial.com/products/"+xid, auth=(user, passw));
+	old_desc = prod.json().description;
 
 	# compute flights
 
 	# update description
-	desc = ""
-	# curl -X PUT -u $key -d '{"description":$old_desc + $desc}' https://papi-sandbox.makeitsocial.com/products/$xid -H "Content-Type:application/json"
+	desc = "/n and <br />Flights: "
+	pyth_request.put("https://papi-sandbox.makeitsocial.com/products/"+xid, auth=(user, passw));
+	# -d '{"description":$old_desc + $desc}'  -H "Content-Type:application/json"
 	
 	return "{'status': 'OK' }";
 
