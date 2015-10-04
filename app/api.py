@@ -279,7 +279,7 @@ def compute_flights(users):
 
 def send_email(users_info):
 	def user_info_to_text(user_info):
-		return user_info["Email"]+"\nFrom: "+user_info["Origin"]+"\nDeparture time: "+user_info["Departure"]+"\nArrival time: "+user_info["Arrival"]+"\nPrice: "+user_info["Price"]+"\n\nTicket in this link: "+user_info["DeeplinkUrl"]+"\n\n\n"
+		return user_info["Email"]+"\nFrom: "+user_info["Origin"]+"\nDeparture time: "+" ".join(user_info["Departure"].split("T"))+"\nArrival time: "+" ".join(user_info["Arrival"].split("T"))+"\nPrice: "+str(user_info["Price"])+"\n\nTicket in this link: "+user_info["DeeplinkUrl"]+"\n\n\n"
 	
 	emails = [user["Email"] for user in users_info]
 	text = "".join([user_info_to_text(user) for user in users_info])
