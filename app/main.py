@@ -46,12 +46,15 @@ def flights(xid, userx, passw):
 	global user_info
 	fl = compute_flights(user_info)
 	print fl
+	desc = "... Flights: "
+	for i in fl:
+		desc += "(from: "+i["Origin"]+", arrival: "+i["Arrival"]+", departure: "+i["Departure"]+", price: "+i["Price"]+") ............."
+		# send email to i["Email"] with i["DeeplinkUrl"]
 
 	#get old description
 	prod = requests.get("https://papi-sandbox.makeitsocial.com/products/"+xid, auth=HTTPBasicAuth(userx, passw))
 	old_desc = str(json.loads(str(prod.text))["description"])
 	# update description
-	desc = "... Flights: "+str(fl)
 	res = requests.put("https://papi-sandbox.makeitsocial.com/products/"+xid, auth=HTTPBasicAuth(userx, passw), data=json.dumps({"description": old_desc+desc}), headers={"Content-Type":"application/json"});
 
 # json encoder for datetime
