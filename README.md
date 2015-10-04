@@ -17,6 +17,7 @@ When attending international conferences, festivals and other events:
 ![03](https://github.com/Dalimil/Skyscanner-Hackday/blob/master/docs/03.png)
 
 ## Installation
+*Please note that all the code was written as quickly as possible (in just two days) and is therefore of poor quality and lacks any documentation.*
 #### Install required packages
 ```sh
 pip install -r requirements.txt
