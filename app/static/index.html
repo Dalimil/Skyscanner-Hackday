@@ -45,16 +45,16 @@
 									<input class="form-control" ng-model="new_product.name" placeholder="Where do you want to go?">
 								</div>
 								<div class="form-group">
+									<label>Arrive by:</label>
+									<input class="form-control" type="date" ng-model="new_product.date_range.start" placeholder="The latest time you want to arrive">
+								</div>
+								<div class="form-group">
 									<label>Short Description:</label>
 									<input class="form-control" ng-model="new_product.description" placeholder="Information for your friends">
 								</div>
 								<div class="form-group">
 									<label>Image:</label>
 									<input class="form-control" ng-model="new_product.image" placeholder="Image URL">
-								</div>
-								<div class="form-group">
-									<label>Arrive by:</label>
-									<input class="form-control" type="date" ng-model="new_product.date_range.start" placeholder="The latest time you want to arrive">
 								</div>
 								<button type="submit" class="btn btn-primary">Create</button>
 							</form>
