@@ -14,28 +14,32 @@ def main():
 def admin():
 	return server.send_static_file('admin.html')
 
+import requests
+from requests.auth import HTTPBasicAuth
 @server.route('/papi/booking', methods=['POST'])
 def webhook():
-	key = "dalimilhajek@gmail.com:57905a18a3a333b1f80d766bf9e40b5a";
+	userx = "dalimilhajek@gmail.com"
+	passw = "57905a18a3a333b1f80d766bf9e40b5a";
 	data = request.get_json()
-	# xid = data.xid
-	# TODO: Save into a DB: (email, origin)
+	xid = data["product"]["id"]
+	email = data["booking"]["sp"]["usr"]["em"]
 	
-	# user = data.user
 	# origin = data.origin
-	# json.dumps(data)
-	# update description
 
-	# curl -X GET -u $key https://papi-sandbox.makeitsocial.com/products/$xid
-	# old_desc = ?
+	
 
 	# compute flights
+	fl = "..."
+	# fl = flights.compute_flights([{"email":"origin"}, { ])
 
+	#get old description
+	prod = requests.get("https://papi-sandbox.makeitsocial.com/products/"+xid, auth=HTTPBasicAuth(userx, passw))
+	old_desc = str(json.loads(str(prod.text))["description"])
 	# update description
-	desc = ""
-	# curl -X PUT -u $key -d '{"description":$old_desc + $desc}' https://papi-sandbox.makeitsocial.com/products/$xid -H "Content-Type:application/json"
+	desc = "and Flights: "+str(fl)
+	res = requests.put("https://papi-sandbox.makeitsocial.com/products/"+xid, auth=HTTPBasicAuth(userx, passw), data=json.dumps({"description": old_desc+desc}), headers={"Content-Type":"application/json"});
 	
-	return "{'status': 'OK' }";
+	return "{'status': 'OK' }"+";;;"+res.text;
 
 # json encoder for datetime
 def isodatetime(obj):
