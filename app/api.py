@@ -277,8 +277,17 @@ def compute_flights(users):
 
 	return users_info
 
+def send_email(users_info):
+	def user_info_to_text(user_info):
+		return user_info["Email"]+"\nFrom: "+user_info["Origin"]+"\nDeparture time: "+user_info["Departure"]+"\nArrival time: "+user_info["Arrival"]+"\nPrice: "+user_info["Price"]+"\n\nTicket in this link: "+user_info["DeeplinkUrl"]+"\n\n\n"
+	
+	emails = [user["Email"] for user in users_info]
+	text = "".join([user_info_to_text(user) for user in users_info])
+	subject = "Trip to "+users_info[0]["Destination"]+" - tickets and schedule"
 
+	url = "https://api.mailgun.net/v3/sandboxff7ed2cffc264af087e9442d1e5b02e8.mailgun.org/messages"
+	data = {"from":"gowithfriends@hackathon.com","to":emails,"subject":subject,"text":text}
 
-
+	r = requests.post(url,auth=("api","key-e8921e9f18f175219e090d218a3c6db5"),data=data)
 
 
