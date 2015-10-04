@@ -15,7 +15,7 @@ def admin():
 	return server.send_static_file('admin.html')
 
 import requests
-from api import compute_flights
+from api import compute_flights, send_email
 from requests.auth import HTTPBasicAuth
 user_info = []
 @server.route('/papi/booking', methods=['POST'])
@@ -46,10 +46,10 @@ def flights(xid, userx, passw):
 	global user_info
 	fl = compute_flights(user_info)
 	print fl
-	desc = "... Flights: "
+	send_email(fl)
+	desc = ".....................................................CHECK YOUR EMAIL FOR MORE INFORMATION!.........Flights: "
 	for i in fl:
-		desc += "(from: "+i["Origin"]+", arrival: "+i["Arrival"]+", departure: "+i["Departure"]+", price: "+i["Price"]+") ............."
-		# send email to i["Email"] with i["DeeplinkUrl"]
+		desc += str(i["Email"])+":(from: "+i["Origin"]+", departure: "+str(i["Departure"])+", duration: "+str(i["Duration"])+"min, arrival: "+str(i["Arrival"])+", price: "+str(i["Price"])+"€) ............................"
 
 	#get old description
 	prod = requests.get("https://papi-sandbox.makeitsocial.com/products/"+xid, auth=HTTPBasicAuth(userx, passw))
