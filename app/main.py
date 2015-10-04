@@ -36,16 +36,16 @@ def webhook():
 	user_info.append(single_u_info)
 
 	group_size = data["booking"]["sp"]["gsize"]
-	f = ""
 	if(len(user_info) >= group_size):
-		f=flights(xid, userx, passw)
+		flights(xid, userx, passw)
 		user_info = []
-	return "{'status': 'OK' }"+json.dumps(f)+"--"+str(len(user_info));
+	return "{'status': 'OK' }";
 
 def flights(xid, userx, passw):
 	# compute flights
 	global user_info
 	fl = compute_flights(user_info)
+	print fl
 
 	#get old description
 	prod = requests.get("https://papi-sandbox.makeitsocial.com/products/"+xid, auth=HTTPBasicAuth(userx, passw))
