@@ -1,6 +1,7 @@
 #Skyscanner & Make it Social - HACKDAY (Edinburgh, 3-4th Oct 2015)
 
 **Goal:** Create something innovative using both [Skyscanner](http://www.skyscanner.net) API and [Make it Social](https://makeitsocial.com) API
+
 **Team:** [Dalimil Hajek](https://github.com/dalimil), [Miguel Jaques](https://github.com/seuqaj114)
 
 When attending international conferences, festivals and other events:
